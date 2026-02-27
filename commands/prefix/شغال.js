@@ -1,10 +1,10 @@
 module.exports = {
-  name: "ping",
+  name: "شغال",
 
   async execute(message, args, client) {
     const msg = await message.reply("🏓 Pinging...");
     const latency = msg.createdTimestamp - message.createdTimestamp;
 
-    msg.edit(`🏓 Pong!\n📡 API: ${client.ws.ping}ms\n⏱ Response: ${latency}ms`);
+    msg.edit(`شغاال يا قلبي 👌\n📡 API: ${client.ws.ping}ms\n⏱ Response: ${latency}ms`);
   }
 };
