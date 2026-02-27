@@ -17,6 +17,13 @@ module.exports = (client) => {
     const command = client.prefixCommands.get(commandName);
     if (!command) return;
 
+    // 🔒 CHECK ADMIN PERMISSION
+    if (command.adminOnly) {
+      if (!message.member.permissions.has(command.permissions)) {
+        return message.reply("❌ معندكش صلاحية تستخدم الأمر ده.");
+      }
+    }
+
     try {
       await command.execute(message, args, client);
     } catch (error) {
