@@ -1,3 +1,5 @@
+const { PermissionFlagsBits } = require("discord.js");
+
 module.exports = {
   name: "say",
   adminOnly: true,
