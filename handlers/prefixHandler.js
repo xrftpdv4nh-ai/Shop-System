@@ -1,6 +1,9 @@
 const fs = require("fs");
 
 module.exports = (client) => {
+
+  const cooldowns = new Map();
+
   const commandFiles = fs.readdirSync("./commands/prefix").filter(file => file.endsWith(".js"));
 
   for (const file of commandFiles) {
@@ -26,13 +29,38 @@ module.exports = (client) => {
       }
     }
 
-    try {
-      await message.delete().catch(() => {}); // 🧹 حذف رسالة الأدمن
+    // ⛔ لو الأمر عليه كول داون
+    if (command.cooldown) {
+      const now = Date.now();
+      const cooldownAmount = command.cooldown * 1000;
 
-      // 👇 بنبعت reply function جاهزة للـ command
+      if (!cooldowns.has(command.name)) {
+        cooldowns.set(command.name, new Map());
+      }
+
+      const timestamps = cooldowns.get(command.name);
+
+      if (timestamps.has(message.author.id)) {
+        const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
+
+        if (now < expirationTime) {
+          const timeLeft = ((expirationTime - now) / 1000).toFixed(1);
+          const msg = await message.reply(`⏳ استنى ${timeLeft}s.`);
+          setTimeout(() => msg.delete().catch(() => {}), 4000);
+          return;
+        }
+      }
+
+      timestamps.set(message.author.id, now);
+      setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
+    }
+
+    try {
+      await message.delete().catch(() => {});
+
       const sendTemp = async (content) => {
         const msg = await message.channel.send(content);
-        setTimeout(() => msg.delete().catch(() => {}), 5000); // يتحذف بعد 5 ثواني
+        setTimeout(() => msg.delete().catch(() => {}), 10000);
       };
 
       await command.execute(message, args, client, sendTemp);
@@ -40,7 +68,8 @@ module.exports = (client) => {
     } catch (error) {
       console.error(error);
       const err = await message.channel.send("❌ حصل خطأ.");
-      setTimeout(() => err.delete().catch(() => {}), 4000);
+      setTimeout(() => err.delete().catch(() => {}), 5000);
     }
+
   });
 };
