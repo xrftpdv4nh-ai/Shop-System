@@ -1,7 +1,7 @@
 const { PermissionFlagsBits } = require("discord.js");
 
 module.exports = {
-  name: "unlock",
+  name: "فتح",
   adminOnly: true,
   permissions: PermissionFlagsBits.ManageChannels,
   cooldown: 10,
