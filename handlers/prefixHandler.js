@@ -17,18 +17,30 @@ module.exports = (client) => {
     const command = client.prefixCommands.get(commandName);
     if (!command) return;
 
-    // 🔒 CHECK ADMIN PERMISSION
+    // 🔒 صلاحيات
     if (command.adminOnly) {
       if (!message.member.permissions.has(command.permissions)) {
-        return message.reply("❌ معندكش صلاحية تستخدم الأمر ده.");
+        const reply = await message.reply("❌ معندكش صلاحية.");
+        setTimeout(() => reply.delete().catch(() => {}), 4000);
+        return;
       }
     }
 
     try {
-      await command.execute(message, args, client);
+      await message.delete().catch(() => {}); // 🧹 حذف رسالة الأدمن
+
+      // 👇 بنبعت reply function جاهزة للـ command
+      const sendTemp = async (content) => {
+        const msg = await message.channel.send(content);
+        setTimeout(() => msg.delete().catch(() => {}), 5000); // يتحذف بعد 5 ثواني
+      };
+
+      await command.execute(message, args, client, sendTemp);
+
     } catch (error) {
       console.error(error);
-      message.reply("❌ حصل خطأ.");
+      const err = await message.channel.send("❌ حصل خطأ.");
+      setTimeout(() => err.delete().catch(() => {}), 4000);
     }
   });
 };
