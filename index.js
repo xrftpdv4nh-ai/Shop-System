@@ -13,7 +13,7 @@ const client = new Client({
 
 client.commands = new Collection();
 client.prefixCommands = new Collection();
-client.prefix = "!";
+client.prefix = "$";
 
 // === LOAD HANDLERS ===
 require("./handlers/slashHandler")(client);
