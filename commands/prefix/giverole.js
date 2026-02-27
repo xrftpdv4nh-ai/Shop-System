@@ -1,7 +1,7 @@
 const { PermissionFlagsBits } = require("discord.js");
 
 module.exports = {
-  name: "giverole",
+  name: "رول",
   adminOnly: true,
   permissions: PermissionFlagsBits.ManageRoles,
   cooldown: 10,
