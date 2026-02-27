@@ -1,5 +1,6 @@
 const { PermissionFlagsBits } = require("discord.js");
 const fs = require("fs");
+const path = require("path");
 
 module.exports = {
   name: "تحذير",
@@ -12,7 +13,20 @@ module.exports = {
     const member = message.mentions.members.first();
     if (!member) return sendTemp("❌ منشن الشخص.");
 
-    const filePath = "./data/warnings.json";
+    // ====== ضمان وجود فولدر وملف البيانات ======
+    const dataFolder = path.join(process.cwd(), "data");
+    const filePath = path.join(dataFolder, "warnings.json");
+
+    if (!fs.existsSync(dataFolder)) {
+      fs.mkdirSync(dataFolder);
+    }
+
+    if (!fs.existsSync(filePath)) {
+      fs.writeFileSync(filePath, JSON.stringify({}));
+    }
+
+    // ===========================================
+
     const data = JSON.parse(fs.readFileSync(filePath));
 
     if (!data[member.id]) {
