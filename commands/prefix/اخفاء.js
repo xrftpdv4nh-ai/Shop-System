@@ -1,7 +1,7 @@
 const { PermissionFlagsBits } = require("discord.js");
 
 module.exports = {
-  name: "hide",
+  name: "اخفاء",
   adminOnly: true,
   permissions: PermissionFlagsBits.ManageChannels,
   cooldown: 10,
