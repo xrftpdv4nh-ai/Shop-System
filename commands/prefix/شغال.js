@@ -1,10 +1,11 @@
 module.exports = {
   name: "شغال",
+  cooldown: 10,
 
-  async execute(message, args, client) {
-    const msg = await message.reply("🏓 Pinging...");
-    const latency = msg.createdTimestamp - message.createdTimestamp;
+  async execute(message, args, client, sendTemp) {
 
-    msg.edit(`شغاال يا قلبي 👌\n📡 API: ${client.ws.ping}ms\n⏱ Response: ${latency}ms`);
+    sendTemp(
+      `شغال يقلبي 👌\n📡 API: ${client.ws.ping}ms`
+    );
   }
 };
